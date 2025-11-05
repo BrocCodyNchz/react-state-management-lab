@@ -4,6 +4,8 @@ import './App.css';
 const App = () => {
   const [team, setTeam] =  useState([]); //Team state is an empty array
   const [money, setMoney] = useState(100); //Money state starts at 100
+
+  //Below sets the pool of available fighters
   const [zombieFighters, setZombieFighters] = useState([
     {
       id: 1,
@@ -87,25 +89,25 @@ const App = () => {
     },
   ]);
 
+ //Handles the fighters by checking the money first 
   const handleAddFighter = (fighter) => {
     if (money < fighter.price) {
       return;
     }
-
+  //Adds them to the team by copying old team and then adding additional fighter and removing them from pool.
     setTeam([...team, fighter]);
     setZombieFighters(zombieFighters.filter(f => f.id !== fighter.id)); //had to change to F because names were conflicting.
     setMoney(money - fighter.price);
   };
-
+//Removing them from the team and adding them back into the pool as well as refunding the money.
   const handleRemoveFighter = (fighter) => {
     setTeam(team.filter(f => f.id !== fighter.id));
     setZombieFighters([...zombieFighters, fighter]);
     setMoney(money + fighter.price);
   };
 
-  const totalStrength = team.reduce((sum, f) => sum + f.strength, 0);
-  const totalAgility = team.reduce((sum, f) => sum + f.agility, 0);
-
+  const totalStrength = team.reduce((sum, f) => sum + f.strength, 0); //reduce loops through team and sums up strength.
+  const totalAgility = team.reduce((sum, f) => sum + f.agility, 0); //reduce loops through team and sums up agility.
 
   return (
       <div className='App'>
@@ -121,8 +123,8 @@ const App = () => {
         <h2>Team</h2>
 
         {team.length === 0 ? (
-          <p><em>Pick some team members!</em></p>
-        ) : (
+          <p><em>Pick some team members!</em></p> //EM is emphasize text (italics)
+        ) : ( //was looking at Conditional (ternary) operators on MDN and tried it here. Only reason I did not you if/else
             <ul className='team-list'>
               {team.map(fighter => (
                 <li key={fighter.id} className='fighter-card'>
